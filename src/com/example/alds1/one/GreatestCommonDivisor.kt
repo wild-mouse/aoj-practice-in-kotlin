@@ -18,7 +18,7 @@ fun main(args: Array<String>) =
             println(e)
         }
 
-fun fastGcd(a: Int, b: Int): Int {
+tailrec fun fastGcd(a: Int, b: Int): Int {
     val x = max(a, b)
     val y = min(a, b)
     if ((x % y) == 0) {
