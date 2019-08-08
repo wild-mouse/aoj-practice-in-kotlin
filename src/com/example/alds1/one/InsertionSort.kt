@@ -1,25 +1,31 @@
 package com.example.alds1.one
 
+import java.lang.Exception
 import java.util.*
 
 fun main(args: Array<String>) {
-    val sc = Scanner(System.`in`)
     try {
-        val n = sc.nextInt()
-        val a = IntArray(n)
-        for (i in 0 until n) {
-            a[i] = sc.nextInt()
+        val sc = Scanner(System.`in`)
+        val n = Integer.parseInt(sc.nextLine())
+        val ns = sc.nextLine()
+                .split(" ")
+                .map { Integer.parseInt(it) }
+                .toMutableList()
+        if (n != ns.size || n < 1 || n > 100
+                || ns.any { 0 > it && 1000 < it }
+        ) {
+            throw Exception("Illegal inputs.")
         }
-        println(a.joinToString(" "))
-        for (i in 1 until a.size) {
-            val v = a[i]
-            var j = i - 1
-            while (j >= 0 && a[j] > v) {
-                a[j + 1] = a[j]
-                j--
+        for (i in 0 until ns.size) {
+            val v = ns[i]
+            for (j in (i-1) downTo 0)  {
+                if (ns[j] <= v) {
+                    break
+                }
+                ns[j+1] = ns[j]
+                ns[j] = v
             }
-            a[j+1] = v
-            println(a.joinToString(" "))
+            println(ns.joinToString(" "))
         }
     } catch (e: Exception) {
         println(e)
