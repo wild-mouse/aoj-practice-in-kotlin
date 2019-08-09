@@ -12,7 +12,7 @@ fun main(args: Array<String>) {
             if (a < 2 || a > 100_000_000) {
                 throw Exception("Illegal input.")
             }
-            if (isPrime(a)) c++
+            if (isPrimeFast(a)) c++
         }
         println(c)
     } catch (e: Exception) {
@@ -20,8 +20,18 @@ fun main(args: Array<String>) {
     }
 }
 
-fun isPrime(a: Int): Boolean {
-    for (i in 2 until a) {
+fun isPrimeFast(a: Int): Boolean {
+    val p = Math.sqrt(a.toDouble()).toInt()
+    for (i in 2..p) {
+        if (a % i == 0) {
+            return false
+        }
+    }
+    return true
+}
+
+fun isPrimeSlow(a: Int): Boolean {
+    for (i in 2..a) {
         if (a % i == 0) {
             return false
         }
