@@ -16,14 +16,26 @@ fun main(args: Array<String>) {
                 throw Exception("Illegal input.")
             }
         }
-        val m = getMaximumProfit(rs)
+        val m = getMaximumProfitFast(rs)
         println(m)
     } catch (e: Exception) {
         println(e)
     }
 }
 
-fun getMaximumProfit(rs: IntArray): Int {
+fun getMaximumProfitFast(rs: IntArray): Int {
+    var r = -1_000_000_000
+    var rMin = rs[0]
+    for (i in 1 until rs.size) {
+        if (r < rs[i] - rMin) {
+            r = rs[i] - rMin
+        }
+        if (rs[i] < rMin) rMin = rs[i]
+    }
+    return r
+}
+
+fun getMaximumProfitSlow(rs: IntArray): Int {
     var r = -1_000_000_000
     for (i in 0 until rs.size) {
         for (j in i + 1 until rs.size) {
