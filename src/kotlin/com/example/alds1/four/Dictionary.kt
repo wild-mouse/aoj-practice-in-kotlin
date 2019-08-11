@@ -2,6 +2,7 @@ package com.example.alds1.four
 
 import java.util.*
 
+// TODO: Not resolved.
 fun main(args: Array<String>) {
     try {
         val sc = Scanner(System.`in`)
