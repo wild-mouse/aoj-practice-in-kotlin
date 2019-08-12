@@ -17,6 +17,7 @@ fun main(args: Array<String>) {
             }
         }
         val quickSorted = quickSort(a.copyOf(), 0, a.size - 1)
+        // TODO: replace with merge sort
         val bubbleSorted = bubbleSort(a.copyOf())
         if (isStable(bubbleSorted, quickSorted)) println("Stable") else println("Not stable")
         println(quickSorted.joinToString("\n") { "${it.first} ${it.second}" })
