@@ -9,11 +9,22 @@ fun main(args: Array<String>) {
         if (n < 0 || n > 44) {
             throw Exception("Unexpected input.")
         }
-        val nn = fibonacciNumberOf(n)
-        println(nn)
+//        val nn = fibonacciNumberOf(n)
+        val nn= makeFibonacci(n)
+        println(nn[n])
     } catch (e: Exception) {
         println(e)
     }
+}
+
+fun makeFibonacci(n: Int): IntArray {
+    val fibonacciNumbers = IntArray(n+ 1)
+    fibonacciNumbers[0] = 1
+    fibonacciNumbers[1] = 1
+    for (i in 2 .. n) {
+        fibonacciNumbers[i] = fibonacciNumbers[i - 1] + fibonacciNumbers[i -2]
+    }
+    return fibonacciNumbers
 }
 
 fun fibonacciNumberOf(n: Int, memo: IntArray = IntArray(n + 1)): Int {
