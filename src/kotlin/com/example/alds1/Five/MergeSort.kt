@@ -2,57 +2,58 @@ package com.example.alds1.Five
 
 import java.util.*
 
+var count = 0
+
 fun main(args: Array<String>) {
-    try {
-        val sc = Scanner(System.`in`)
-        val n = Integer.parseInt(sc.nextLine())
-        val s = IntArray(n)
-        for (i in 0 until n) {
-            s[i] = sc.nextInt()
-        }
-        if (n > 500_000 || s.size > 1_000_000_000 || n != s.size) {
-            throw Exception("Illegal input")
-        }
-        val c = mergeSort(s, 0, s.size)
-        println(s.joinToString(" "))
-        println(c)
-    } catch (e: Exception) {
-        println(e)
+    val sc = Scanner(System.`in`)
+    val n = Integer.parseInt(sc.next())
+    val s = IntArray(n)
+    for (i in 0 until n) {
+        s[i] = Integer.parseInt(sc.next())
     }
+    mergeSort(s, 0, s.size)
+    for (i in 0 until s.size) {
+        print(s[i])
+        if (i < s.size - 1) {
+            print(" ")
+        }
+    }
+    println()
+    println(count)
 }
 
-fun mergeSort(a: IntArray, left: Int, right: Int): Int {
-    var c = 0
-    if (left + 1 < right) {
-        val mid = (left + right) / 2
-        c += mergeSort(a, left, mid)
-        c += mergeSort(a, mid, right)
-        c += merge(a, left, mid, right)
+fun mergeSort(s: IntArray, left: Int, right: Int) {
+    if (left + 1 >= right) {
+        return
     }
-    return c
+    val mid = (left + right) / 2
+    mergeSort(s, left, mid)
+    mergeSort(s, mid, right)
+    merge(s, left, right)
 }
 
-fun merge(a: IntArray, left: Int, mid: Int, right: Int): Int {
-    val n1 = mid - left
-    val n2 = right - mid
-    val l = IntArray(n1)
-    val r = IntArray(n2)
-    for (i in 0 until n1) {
-        l[i] = a[left + i]
-    }
-    for (i in 0 until n2) {
-        r[i] = a[mid + i]
-    }
+fun merge(s: IntArray, left: Int, right: Int) {
+    val mid = (left + right) / 2
+    val leftA = s.toList().subList(left, mid).toIntArray()
+    val rightA = s.toList().subList(mid, right).toIntArray()
     var i = 0
     var j = 0
-    var c = 0
     for (k in left until right) {
-        if (j >= r.size || (i < l.size && l[i] <= r[j])) {
-            a[k] = l[i++]
-        } else {
-            a[k] = r[j++]
+        count++
+        if (i >= leftA.size) {
+            s[k] = rightA[j++]
+            continue
         }
-        c++
+        if (j >= rightA.size) {
+            s[k] = leftA[i++]
+            continue
+        }
+        if (leftA[i] > rightA[j]) {
+            s[k] = rightA[j++]
+        } else {
+            s[k] = leftA[i++]
+        }
     }
-    return c
 }
+
+

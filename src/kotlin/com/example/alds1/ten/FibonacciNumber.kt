@@ -2,39 +2,28 @@ package com.example.alds1.ten
 
 import java.util.*
 
+val ns: MutableList<Int> = MutableList(45) { -1 }
+
 fun main(args: Array<String>) {
-    try {
-        val sc = Scanner(System.`in`)
-        val n = sc.nextInt()
-        if (n < 0 || n > 44) {
-            throw Exception("Unexpected input.")
-        }
-//        val nn = fibonacciNumberOf(n)
-        val nn= makeFibonacci(n)
-        println(nn[n])
-    } catch (e: Exception) {
-        println(e)
-    }
+    val sc = Scanner(System.`in`)
+    val n = sc.nextInt()
+    val fn = getFibonacciNumber(n)
+    println(fn)
 }
 
-fun makeFibonacci(n: Int): IntArray {
-    val fibonacciNumbers = IntArray(n+ 1)
-    fibonacciNumbers[0] = 1
-    fibonacciNumbers[1] = 1
-    for (i in 2 .. n) {
-        fibonacciNumbers[i] = fibonacciNumbers[i - 1] + fibonacciNumbers[i -2]
-    }
-    return fibonacciNumbers
-}
+fun getFibonacciNumber(n: Int): Int = calcFibonacciNumber(n)
 
-fun fibonacciNumberOf(n: Int, memo: IntArray = IntArray(n + 1)): Int {
+fun calcFibonacciNumber(n: Int): Int {
+    if (n < 0) {
+        return 0;
+    }
     if (n == 0 || n == 1) {
-        memo[n] = 1
-        return memo[n]
+        return 1;
     }
-    if (memo[n] != 0) {
-        return memo[n]
+    if (ns[n] != -1) {
+        return ns[n]
     }
-    memo[n] = fibonacciNumberOf(n - 1, memo) + fibonacciNumberOf(n - 2, memo)
-    return memo[n]
+    val fn = calcFibonacciNumber(n - 1) + calcFibonacciNumber(n - 2)
+    ns[n] = fn
+    return fn
 }

@@ -3,86 +3,57 @@ package com.example.alds1.six
 import java.util.*
 
 fun main(args: Array<String>) {
-    try {
-        val sc = Scanner(System.`in`)
-        val n = sc.nextInt()
-        if (n < 1 || n > 100_000) {
-            throw Exception("Illegal input")
-        }
-        val a = Array(n) { "" to 0 }
-        for (i in 0 until n) {
-            a[i] = sc.next()!! to sc.nextInt()
-            if (a[i].second < 1 || a[i].second > 1_000_000_000) {
-                throw Exception("Illegal input")
-            }
-        }
-        val quickSorted = quickSort(a.copyOf(), 0, a.size - 1)
-        // TODO: replace with merge sort
-        val bubbleSorted = bubbleSort(a.copyOf())
-        if (isStable(bubbleSorted, quickSorted)) println("Stable") else println("Not stable")
-        println(quickSorted.joinToString("\n") { "${it.first} ${it.second}" })
-    } catch (e: Exception) {
-        println(e)
+    val sc = Scanner(System.`in`)
+    val n = Integer.parseInt(sc.next())
+    val cards = Array(n) { Pair(sc.next()[0], Integer.parseInt(sc.next())) }
+    val sortedCards = quickSort(cards)
+    if (isStable(cards.copyOf(), sortedCards.copyOf())) {
+        println("Stable")
+    } else {
+        println("Not stable")
     }
+    println(sortedCards.joinToString("\n") { it.first + " " + it.second })
 }
 
-fun bubbleSort(a: Array<Pair<String, Int>>): Array<Pair<String, Int>> {
-    var i = 0
-    var isSorted = false
-    while(!isSorted) {
-        for (j in a.size - 1 downTo i + 1) {
-            isSorted = true
-            if (a[j].second < a[j - 1].second) {
-                val tmp = a[j]
-                a[j] = a[j - 1]
-                a[j - 1] = tmp
-                isSorted = false
-            }
-        }
-        i++
-    }
-    return a
+fun quickSort(c: Array<Pair<Char, Int>>): Array<Pair<Char, Int>> {
+    val sortedC = c.copyOf()
+    doQuicksort(sortedC, 0, c.size - 1)
+    return sortedC
 }
 
-fun isStable(
-        bubbleSorted: Array<Pair<String, Int>>,
-        quickSorted: Array<Pair<String, Int>>
-): Boolean {
-    for (i in bubbleSorted.indices) {
-        if (bubbleSorted[i].first != quickSorted[i].first
-                || bubbleSorted[i].second != quickSorted[i].second) {
+fun doQuicksort(c: Array<Pair<Char, Int>>, l: Int, r: Int) {
+    if (l >= r) {
+        return
+    }
+    val mid = partition(c, l, r)
+    doQuicksort(c, 0, mid - 1)
+    doQuicksort(c, mid + 1, r)
+}
+
+fun partition(c: Array<Pair<Char, Int>>, l: Int, r: Int): Int {
+    val x = c[r]
+    var i = l - 1
+    for (j in l until r) {
+        if (x.second >= c[j].second) {
+            i++
+            val tmp = c[i]
+            c[i] = c[j]
+            c[j] = tmp
+        }
+    }
+    val tmp = c[r]
+    c[r] = c[i + 1]
+    c[i + 1] = tmp
+    return i + 1
+}
+
+fun isStable(c1: Array<Pair<Char, Int>>, c2: Array<Pair<Char, Int>>): Boolean {
+    c1.forEach { card1 ->
+        val i = c2.indexOfFirst { card2 -> card1.second == card2.second }
+        if (c2[i].first != card1.first) {
             return false
         }
+        c2[i] = Pair(' ', -1)
     }
     return true
-}
-
-fun quickSort(a: Array<Pair<String, Int>>, p: Int, r: Int): Array<Pair<String, Int>> {
-    if (p < r) {
-        val sorted_i = partition(a, p, r)
-        quickSort(sorted_i.first, p, sorted_i.second - 1)
-        quickSort(sorted_i.first, sorted_i.second + 1, r)
-    }
-    return a
-}
-
-fun partition(
-        a: Array<Pair<String, Int>>,
-        p: Int,
-        r: Int
-): Pair<Array<Pair<String, Int>>, Int> {
-    val x = a[r]
-    var i = p - 1
-    for (j in p until r) {
-        if (a[j].second <= x.second) {
-            i++
-            val tmp = a[i]
-            a[i] = a[j]
-            a[j] = tmp
-        }
-    }
-    val tmp = a[i + 1]
-    a[i + 1] = a[r]
-    a[r] = tmp
-    return a to i + 1
 }
